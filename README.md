@@ -17,6 +17,7 @@ Install using `pip`:
 
 ### Basic Usage
 
+```python
     >>> from injector import inject
     >>> @inject(b=1)
     >>> def add(a, b):
@@ -28,4 +29,4 @@ Install using `pip`:
     6
     >>> add(b=5)
     TypeError: add() missing 1 required positional argument: 'a'
-
+ ```
