@@ -1,0 +1,5 @@
+# Testing requirements
+pytest
+
+# Packaging requirements
+wheel
