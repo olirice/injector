@@ -2,9 +2,22 @@
 
 from inspect import signature
 from functools import wraps
+from typing import Callable
 
 
 __version__ = '1.0.0'
+
+
+class ComponentInitializer:
+    """Wraps an initializer function for an injected component"""
+
+    def __init__(self, component_initializer: Callable):
+        self.component_initializer = component_initializer
+
+
+    def initialize_component(self):
+        """Initialize the component to inject"""
+        return self.component_initializer()
 
 
 def inject(**inject_map):
@@ -43,6 +56,11 @@ def inject(**inject_map):
             params_as_kwargs.update(inject_map)
             params_as_kwargs.update(args_to_kwargs)
             params_as_kwargs.update(kwargs)
+
+            # Initialize any components wrapped in a ComponentInitializer
+            params_as_kwargs = dict((k, v.initialize_component())
+                                    if isinstance(v, ComponentInitializer) else (k, v)
+                                    for k, v in params_as_kwargs.items())
 
             # Now that all parameters are stored as kwargs, call the function
             return func(**params_as_kwargs)
